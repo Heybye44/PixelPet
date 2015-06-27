@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PixelPet</title>
+        <link rel="stylesheet" href="css/styles.css" type="text/css" />
+    </head>
+    <body >
+        
+        <div id = "pet" align = "center">    
+            <img data-bind = "attr: {src: moodImg}, click: interact"/>
+            <br/>
+            
+            <div align = "center">
+                <p>Level: <span data-bind = "text: level"></span></p>
+                <p>EXP: <span data-bind = "text: exp"></span></p>
+                <p>Mood: <span data-bind = "text: moodName"></span></p>
+            </div>
+        </div>
+        
+        <script type='text/javascript' src='scripts/knockout-min.js'></script>
+        <script type="text/javascript" src="scripts/pet.js"></script>
+        <script type="text/javascript" src="scripts/chance.min.js"></script>
+        <script type="text/javascript" src="buzz.min.js"></script>
+    </body>
+</html>
