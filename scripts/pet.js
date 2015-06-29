@@ -2,6 +2,14 @@ var timeSince;
 var end;
 var start;
 
+window.onload = function(){
+    if(localStorage.getItem("exp") == "NaN"){
+        if(confirm("Looks like you haven't played before (or your score got corrupted =[), so the page will reset after somethings are setup. To play pet the adorable pixelated blob cat on the screen. Don't pet too hard or it will hurt him. It not okay to punch cute things. I also recommend playing in the latest version of Firefox, it seems to work the best.")){
+            resetGame();
+        }
+    }
+}
+
 var vm = {
     moodImg: ko.observable("images/tired.png"),
     moodName: ko.observable("Tired"),
@@ -139,6 +147,7 @@ var moods = {
 
 
 function setMood(m){
+    buzz.all().stop();
     vm.moodImg(m.image);
     vm.moodName(m.name);
     
@@ -249,7 +258,7 @@ function reactionCheck() {
         alert("Your petting to hard! Slow down, this isn't Cookie Clicker.");
         return 0;
     }
-    //Makes memes 2x easy to get
+    //Makes memes 2x easier to get
     
     for(var i = 0; i <= 2; i++){
         //Stops all sounds to prevent overlaping
