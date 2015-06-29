@@ -8,9 +8,11 @@ var vm = {
     level: ko.observable(getLevel()),
     exp: ko.observable(getExp()),
     interact: function(){
+                
         //
         //Timing Conitued
         //
+
         
         end = window.performance.now();
         timeSince = end - start;
@@ -25,12 +27,12 @@ var vm = {
         //
         //Mood Changing
         //
+        
         switch (vm.moodName()) {
             case "Tired":
                 setMood(moods.disapointedandsuprised);
                 
-                reactionCheck();
-                break;
+               reactionCheck(); break;
                 
             case "Disapointed and Suprised":
                 if(chance.bool() == true || getLevel() >= 5){
@@ -39,20 +41,17 @@ var vm = {
                     setMood(moods.tired);
                 }
                 
-                reactionCheck();
-                break;
+               reactionCheck(); break;
             
             case "Angry":
                 setMood(moods.sad);
-                
-                reactionCheck();
-                break;
+
+               reactionCheck(); break;
            
             case "Sad":
                 setMood(moods.tired);
                 
-                reactionCheck();
-                break;
+               reactionCheck(); break;
                 
             case "Happy":
                 if(chance.bool() == true){
@@ -60,7 +59,7 @@ var vm = {
                 }else{
                     setMood(moods.neutral);
                 }
-                break;
+               reactionCheck(); break;
             
             case "Neutral":
                 if(chance.bool() == true){
@@ -68,13 +67,23 @@ var vm = {
                 }else{
                     setMood(moods.disapointedandsuprised);
                 }
-                break;
+               reactionCheck(); break;
             
+            case "Doge":
+                if(chance.bool() && chance.bool() && chance.bool()){
+                    setMood(moods.veryhappy);
+                }else{
+                    setMood(moods.happy);
+                }
+                
+               reactionCheck(); break;
             
             default:
                 setMood(moods.tired);
-                break;
+               reactionCheck(); break;
         }
+        
+        reactionCheck();
         
         //Timing Continued
         start = window.performance.now();
@@ -94,11 +103,7 @@ var vm = {
             
             return 0;
         }
-        
-        
-        
 
-        
     }
 };
 
@@ -115,28 +120,34 @@ function mood(n, img, a, s){
     this.sound = s;
 }
 
+var moodSounds = {
+    happy: new buzz.sound("sounds/happy.wav"),
+    angry: new buzz.sound("sounds/angry.wav"),
+    default: new buzz.sound("sounds/default.wav")
+};
+
 var moods = {
     tired: new mood("Tired", "images/tired.png", 0),
     disapointedandsuprised: new mood("Disapointed and Suprised", "images/disapointedandsuprised.png", 100),
-    happy: new mood("Happy", "images/happy.png", 300),
-    angry: new mood("Angry", "images/angry.png", -250),
+    happy: new mood("Happy", "images/happy.png", 300, moodSounds.happy),
+    angry: new mood("Angry", "images/angry.png", -250, moodSounds.angry),
     sad: new mood("Sad", "images/sad.png", -100),
-    veryhappy: new mood("Very Happy", "images/veryhappy.png", 500),
+    veryhappy: new mood("Very Happy", "images/veryhappy.png", 500, moodSounds.happy),
     doge: new mood("Doge", "images/doge.png", 2000),
     neutral: new mood("Neutral", "images/neutral.png", 0)
 };
-
-var moodSounds = buzzGroup([
-
-
-]);
 
 
 function setMood(m){
     vm.moodImg(m.image);
     vm.moodName(m.name);
     
- 
+    
+    if(m.sound != null){
+        m.sound.play();
+    }else{
+        moodSounds.default.play();   
+    }
     setExp(m.affect);
     
 }
@@ -221,24 +232,36 @@ function getLevel(){
 function reactionCheck() {
     //Reactions
     
+    
+    
     //Left For Too Long
     if(timeSince >= 30000){
+        
         setMood(moods.sad);
+        console.log("Lonely")
         return 0;
     }
     
     //Pet too hard
     
-    if(timeSince < 80){
+    if(timeSince < 200){
         setMood(moods.angry);
+        alert("Your petting to hard! Slow down, this isn't Cookie Clicker.");
         return 0;
     }
+    //Makes memes 2x easy to get
     
-    //doge
-    
-    if(getLevel() > 5 && chance.bool() == true && vm.moodName() == "Very Happy"){
-        setMood(moods.doge);
-        return 0;
+    for(var i = 0; i <= 2; i++){
+        //Stops all sounds to prevent overlaping
+        buzz.all().stop();
+        
+        //doge
+
+        if(getLevel() > 5 && chance.bool() == true && vm.moodName() == "Very Happy"){
+            setMood(moods.doge);
+            console.log("Dogified");
+            return 0;
+        }
     }
 }
 
